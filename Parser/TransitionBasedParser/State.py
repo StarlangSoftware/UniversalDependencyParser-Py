@@ -82,13 +82,13 @@ class State:
             elif command == Command.REDUCE:
                 self.applyReduce()
 
-    def relationSize(self):
+    def relationSize(self) -> int:
         return len(self.__relations)
 
-    def wordListSize(self):
+    def wordListSize(self) -> int:
         return len(self.__word_list)
 
-    def stackSize(self):
+    def stackSize(self) -> int:
         return len(self.__stack)
 
     def getStackWord(self, index: int) -> UniversalDependencyTreeBankWord:
@@ -107,7 +107,7 @@ class State:
             return None
         return self.__word_list[index].getWord()
 
-    def getRelation(self, index: int):
+    def getRelation(self, index: int) -> StackRelation:
         if index < len(self.__relations):
             return self.__relations[index]
         return None

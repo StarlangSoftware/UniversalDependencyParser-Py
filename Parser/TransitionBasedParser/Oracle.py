@@ -34,7 +34,7 @@ class Oracle:
 
     def findBestValidEagerClassInfo(self,
                                     probabilities: Dict[str, float],
-                                    state: State):
+                                    state: State) -> str:
         best_value = 0.0
         best = ""
         for key in probabilities:
@@ -51,7 +51,7 @@ class Oracle:
 
     def findBestValidStandardClassInfo(self,
                                        probabilities: Dict[str, float],
-                                       state: State):
+                                       state: State) -> str:
         best_value = 0.0
         best = ""
         for key in probabilities:
@@ -65,7 +65,7 @@ class Oracle:
                         best_value = probabilities[key]
         return best
 
-    def getDecisionCandidate(self, best: str):
+    def getDecisionCandidate(self, best: str) -> Candidate:
         if "(" in best:
             command = best[0:best.index('(')]
             relation = best[best.index('(') + 1:best.index(')')]
