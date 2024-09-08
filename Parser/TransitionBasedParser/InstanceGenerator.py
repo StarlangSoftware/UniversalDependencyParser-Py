@@ -17,12 +17,25 @@ class InstanceGenerator:
                  state: State,
                  windowSize: int,
                  command: str) -> Instance:
+        """
+        Abstract method for generating an instance based on the current state, window size, and command.
+        :param state: The current state of the parser.
+        :param windowSize: The size of the window used for feature extraction.
+        :param command: The command to be used for generating the instance.
+        :return: The generated {@link Instance} object.
+        """
         pass
 
     def addAttributeForFeatureType(self,
                                    word: UniversalDependencyTreeBankWord,
                                    attributes: List[Attribute],
                                    featureType: str):
+        """
+        Adds an attribute for a specific feature type of a given word to the list of attributes.
+        :param word: The word whose feature value is used to create the attribute.
+        :param attributes: The list of attributes to which the new attribute will be added.
+        :param featureType: The type of the feature to be extracted from the word.
+        """
         feature = word.getFeatureValue(featureType)
         number_of_values = UniversalDependencyTreeBankFeatures.numberOfValues("tr", featureType) + 1
         if feature is not None:
@@ -33,6 +46,11 @@ class InstanceGenerator:
             attributes.append(DiscreteIndexedAttribute("null", 0, number_of_values))
 
     def addEmptyAttributes(self, attributes: List[Attribute]):
+        """
+        Adds a set of default (empty) attributes to the list of attributes. These attributes represent
+        various feature types with default "null" values.
+        :param attributes: The list of attributes to which the default attributes will be added.
+        """
         attributes.append(DiscreteIndexedAttribute("null", 0, UniversalDependencyTreeBankFeatures.numberOfValues("tr", "PronType") + 1))
         attributes.append(DiscreteIndexedAttribute("null", 0, UniversalDependencyTreeBankFeatures.numberOfValues("tr", "NumType") + 1))
         attributes.append(DiscreteIndexedAttribute("null", 0, UniversalDependencyTreeBankFeatures.numberOfValues("tr", "Number") + 1))
@@ -51,6 +69,11 @@ class InstanceGenerator:
     def addFeatureAttributes(self,
                              word: UniversalDependencyTreeBankWord,
                              attributes: List[Attribute]):
+        """
+        Adds attributes for various feature types of a given word to the list of attributes.
+        :param word: The word whose feature values are used to create the attributes.
+        :param attributes: The list of attributes to which the new attributes will be added.
+        """
         self.addAttributeForFeatureType(word, attributes, "PronType")
         self.addAttributeForFeatureType(word, attributes, "NumType")
         self.addAttributeForFeatureType(word, attributes, "Number")

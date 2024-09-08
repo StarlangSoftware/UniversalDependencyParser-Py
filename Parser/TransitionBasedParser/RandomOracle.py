@@ -20,6 +20,11 @@ class RandomOracle(Oracle):
         super().__init__(model, windowSize)
 
     def makeDecision(self, state: State) -> Decision:
+        """
+        Makes a random decision based on a uniform distribution over possible actions.
+        :param state: The current state of the parser.
+        :return: A Decision object representing the randomly chosen action.
+        """
         command = random.randrange(3)
         relation = random.randrange(len(UniversalDependencyRelation.universal_dependency_tags))
         if command == 0:

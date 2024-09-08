@@ -21,6 +21,12 @@ class ArcEagerTransitionParser(TransitionParser):
     def simulateParse(self,
                       sentence: UniversalDependencyTreeBankSentence,
                       windowSize: int) -> List[Instance]:
+        """
+        Simulates the parsing process for a given sentence using the Arc Eager parsing algorithm.
+        :param sentence: The sentence to be parsed.
+        :param windowSize: The size of the window used for feature generation.
+        :return: An ArrayList of {@link Instance} objects representing the parsed actions.
+        """
         top_relation = None
         instance_generator = ArcEagerInstanceGenerator()
         instance_list = []
@@ -73,6 +79,12 @@ class ArcEagerTransitionParser(TransitionParser):
     def dependencyParse(self,
                         universalDependencyTreeBankSentence: UniversalDependencyTreeBankSentence,
                         oracle: Oracle) -> UniversalDependencyTreeBankSentence:
+        """
+        Performs dependency parsing on the given sentence using the provided oracle.
+        :param universalDependencyTreeBankSentence: The sentence to be parsed.
+        :param oracle: The oracle used to make parsing decisions.
+        :return: The parsed sentence with dependency relations established.
+        """
         sentence = self.createResultSentence(universalDependencyTreeBankSentence)
         state = self.initialState(sentence)
         while state.wordListSize() > 0 or state.stackSize() > 1:

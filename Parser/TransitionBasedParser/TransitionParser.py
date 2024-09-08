@@ -27,6 +27,12 @@ class TransitionParser:
 
     def createResultSentence(self,
                              universalDependencyTreeBankSentence: UniversalDependencyTreeBankSentence) -> UniversalDependencyTreeBankSentence:
+        """
+        Creates a new {@link UniversalDependencyTreeBankSentence} with the same words as the input sentence,
+        but with null heads, effectively cloning the sentence structure without dependencies.
+        :param universalDependencyTreeBankSentence: the sentence to be cloned
+        :return: a new {@link UniversalDependencyTreeBankSentence} with copied words but no dependencies
+        """
         sentence = UniversalDependencyTreeBankSentence("u")
         for i in range(universalDependencyTreeBankSentence.wordCount()):
             word = universalDependencyTreeBankSentence.getWord(i)
@@ -57,6 +63,12 @@ class TransitionParser:
     def simulateParseOnCorpus(self,
                               corpus: UniversalDependencyTreeBankCorpus,
                               windowSize: int):
+        """
+        Simulates parsing a corpus of sentences, returning a dataset of instances created by parsing each sentence.
+        :param corpus: the corpus to be parsed
+        :param windowSize: the size of the window used in parsing
+        :return: a {@link DataSet} containing instances from parsing each sentence in the corpus
+        """
         dataSet = DataSet()
         for i in range(corpus.sentenceCount()):
             sentence = corpus.getSentence(i)
@@ -64,12 +76,22 @@ class TransitionParser:
                 dataSet.addInstanceList(self.simulateParse(sentence, windowSize))
 
     def checkStates(self, agenda: Agenda) -> bool:
+        """
+        Checks if there are any states in the agenda that still have words to process or have more than one item in the stack.
+        :param agenda: the agenda containing the states
+        :return: true if there are states to process, false otherwise
+        """
         for state in agenda.getKeySet():
             if state.wordListSize() > 0 or state.stackSize() > 1:
                 return True
         return False
 
     def initialState(self, sentence: UniversalDependencyTreeBankSentence) -> State:
+        """
+        Initializes the parsing state with a stack containing one empty {@link StackWord} and a word list containing all words in the sentence.
+        :param sentence: the sentence to initialize the state with
+        :return: a {@link State} representing the starting point for parsing
+        """
         wordList = []
         for i in range(sentence.wordCount()):
             word = sentence.getWord(i)
@@ -81,6 +103,12 @@ class TransitionParser:
     def constructCandidates(self,
                             transitionSystem: TransitionSystem,
                             state: State) -> List[Candidate]:
+        """
+        Constructs possible parsing candidates based on the current state and transition system.
+        :param transitionSystem: the transition system used (ARC_STANDARD or ARC_EAGER)
+        :param state: the current parsing state
+        :return: a list of possible {@link Candidate} actions to be applied
+        """
         if state.stackSize() == 1 and state.wordListSize() == 0:
             return []
         subsets = []
@@ -103,6 +131,14 @@ class TransitionParser:
                                       beamSize: int,
                                       universalDependencyTreeBankSentence: UniversalDependencyTreeBankSentence,
                                       transitionSystem: TransitionSystem) -> State:
+        """
+        Performs dependency parsing with beam search to find the best parse for a given sentence.
+        :param oracle: the scoring oracle used for guiding the search
+        :param beamSize: the size of the beam for beam search
+        :param universalDependencyTreeBankSentence: the sentence to be parsed
+        :param transitionSystem: the transition system used (ARC_STANDARD or ARC_EAGER)
+        :return: the best parsing state from the beam search
+        """
         sentence = self.createResultSentence(universalDependencyTreeBankSentence)
         initialState = self.initialState(sentence)
         agenda = Agenda(beamSize)
@@ -121,6 +157,12 @@ class TransitionParser:
     def dependencyParseCorpus(self,
                               universalDependencyTreeBankCorpus: UniversalDependencyTreeBankCorpus,
                               oracle: Oracle) -> UniversalDependencyTreeBankCorpus:
+        """
+        Parses a corpus of sentences using the given oracle and returns a new corpus with the parsed sentences.
+        :param universalDependencyTreeBankCorpus: the corpus to be parsed
+        :param oracle: the oracle used for guiding the parsing process
+        :return: a {@link UniversalDependencyTreeBankCorpus} containing the parsed sentences
+        """
         corpus = UniversalDependencyTreeBankCorpus()
         for i in range(universalDependencyTreeBankCorpus.sentenceCount()):
             sentence = universalDependencyTreeBankCorpus.getSentence(i)
