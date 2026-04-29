@@ -5,8 +5,8 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
-    name='NlpToolkit-UniversalDependencyParser',
-    version='1.0.0',
+    name='nlptoolkit_universaldependencyparser',
+    version='1.0.1',
     packages=['Parser', 'Parser.TransitionBasedParser'],
     url='https://github.com/StarlangSoftware/UniversalDependencyParser-Py',
     license='',
